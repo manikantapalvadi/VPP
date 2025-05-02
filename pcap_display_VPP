@@ -1,0 +1,7 @@
+packet-generator new { \
+    name cap \
+    limit 0 \
+    interface loop0 \
+    node ethernet-input \
+    pcap /home/mani27pvs/udp-wireshark-trace.pcap \
+}
