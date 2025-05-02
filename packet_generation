@@ -1,0 +1,23 @@
+sudo vppctl create host-interface name eth0
+sudo vppctl set interface ip address host-eth0 192.168.40.2/24
+sudo vppctl set interface state host-eth0 up
+
+# Configure the packet generator
+sudo vppctl packet-generator new { \
+    name worker0 \
+    worker 0 \
+    limit 0 \
+    rate 1.2e7 \
+    size 128-128 \
+    tx-interface host-eth0 \
+    node host-eth0-output \
+    data { IP4: 192.168.40.10 -> 192.168.50.10 \
+           UDP: 1234 -> 2345 \
+           incrementing 114 \
+    } \
+}
+
+sudo vppctl packet-generator enable  worker0
+
+# Configure routes to drop traffic
+sudo vppctl ip route add 192.168.50.0/24 via drop
